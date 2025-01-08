@@ -1,0 +1,58 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main # Trigger on pushes to the main branch
+  pull_request:
+    branches:
+      - main # Trigger on pull requests to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20
+
+      # Step 3: Build the Go application
+      - name: Build Go Application
+        run: go build -o server server.go
+
+      # Step 4: Run tests (if any)
+      - name: Run Tests
+        run: go test ./...
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Log in to DockerHub
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.chaitanyamalepati224 }}
+          password: ${{ secrets.Space@224 }}
+
+      # Step 3: Build and tag the Docker image
+      - name: Build and Tag Docker Image
+        run: |
+          docker build -t ${{ secrets.chaitanyamalepati224 }}/go-server:latest .
+
+      # Step 4: Push the Docker image to DockerHub
+      - name: Push Docker Image to DockerHub
+        run: |
+          docker push ${{ secrets.chaitanyamalepati224 }}/go-server:latest

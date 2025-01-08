@@ -1,0 +1,33 @@
+name: Auto-Merge to Main
+
+on:
+  pull_request:
+    types:
+      - closed # Trigger the workflow when a pull request is closed
+
+jobs:
+  merge:
+    if: github.event.pull_request.merged == true # Run only if the PR is merged
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Configure Git user
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      # Step 3: Fetch the latest changes
+      - name: Fetch Latest Changes
+        run: git fetch origin main
+
+      # Step 4: Merge PR changes into the main branch
+      - name: Merge Changes
+        run: |
+          git checkout main
+          git merge --no-ff ${{ github.head_ref }}
+          git push origin main
