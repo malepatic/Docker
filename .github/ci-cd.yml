@@ -45,7 +45,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.chaitanyamalepati224 }}
-          password: ${{ secrets.Space@224 }}
+          password: ${{ secrets. dckr_pat_B0-xCNOUx2SwGR8qet4ymiZ8Ql0 }}
 
       # Step 3: Build and tag the Docker image
       - name: Build and Tag Docker Image
